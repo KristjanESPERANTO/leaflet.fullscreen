@@ -218,8 +218,8 @@ const FullScreen = Control.extend({
 				target.classList.remove('leaflet-pseudo-fullscreen');
 			}
 			map.invalidateSize();
-			map.fire('exitFullscreen');
 			map._isFullscreen = false;
+			map.fire('exitFullscreen');
 		} else {
 			if (this._screenfull.isEnabled && !this.options.forcePseudoFullscreen) {
 				await this._screenfull.request(target);
@@ -227,8 +227,8 @@ const FullScreen = Control.extend({
 				target.classList.add('leaflet-pseudo-fullscreen');
 			}
 			map.invalidateSize();
-			map.fire('enterFullscreen');
 			map._isFullscreen = true;
+			map.fire('enterFullscreen');
 		}
 	},
 
@@ -237,11 +237,11 @@ const FullScreen = Control.extend({
 		const isFullscreen = this._map._isFullscreen;
 
 		// Update Title & Aria Label
-		this.link.title = isFullscreen ? title : titleCancel;
+		this.link.title = isFullscreen ? titleCancel : title;
 		this.link.setAttribute('aria-label', this.link.title);
 
 		// Update Icon Class
-		this.link.classList.toggle('leaflet-fullscreen-on', !isFullscreen);
+		this.link.classList.toggle('leaflet-fullscreen-on', isFullscreen);
 	},
 
 	_handleFullscreenChange(ev) {
@@ -253,8 +253,8 @@ const FullScreen = Control.extend({
 		const wasExitedExternally = !this._screenfull.isFullscreen && !this._handlingExit;
 
 		if (isOurElement && wasExitedExternally) {
-			map.fire('exitFullscreen');
 			map._isFullscreen = false;
+			map.fire('exitFullscreen');
 			map.invalidateSize();
 		}
 	}
